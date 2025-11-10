@@ -1,43 +1,84 @@
+'use client';
+
 import Image from "next/image";
-import { Hero } from "@/components";
+import { useState } from "react";
+import { Hero, FileUploader, FillerWordAnalyzer } from "@/components";
+import { analyzeFillerWords } from "@/services/fillerWordService";
 
 export default function Home() {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [analysis, setAnalysis] = useState(null);
+
+  const handleFileSelect = async (file) => {
+    setIsProcessing(true);
+    setAnalysis(null);
+
+    try {
+      // Simulasi analisis untuk MVP
+      const result = await analyzeFillerWords(file);
+      setAnalysis(result);
+    } catch (error) {
+      console.error('Error analyzing file:', error);
+      alert('Terjadi kesalahan saat menganalisis file. Silakan coba lagi.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleReset = () => {
+    setAnalysis(null);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <Hero />
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-black font-sans p-4">
+      <main className="flex min-h-screen w-full max-w-4xl flex-col items-center justify-center py-12 px-4 sm:px-8">
+        {/* Logo/Brand */}
+        <div className="mb-8 flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+            <span className="text-white text-xl font-bold">P</span>
+          </div>
+        </div>
+
+        {/* Hero Section */}
+        <div className="mb-12">
+          <Hero />
+        </div>
+
+        {/* Main Content */}
+        {!analysis ? (
+          <>
+            <FileUploader onFileSelect={handleFileSelect} isProcessing={isProcessing} />
+            
+            {isProcessing && (
+              <div className="mt-8 flex flex-col items-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                <p className="text-zinc-600 dark:text-zinc-400 text-lg">
+                  Menganalisis filler words...
+                </p>
+                <p className="text-zinc-500 dark:text-zinc-500 text-sm mt-2">
+                  Mohon tunggu sebentar
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <FillerWordAnalyzer analysis={analysis} />
+            
+            <button
+              onClick={handleReset}
+              className="mt-8 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+            >
+              Analisis File Lain
+            </button>
+          </>
+        )}
+
+        {/* Footer */}
+        <div className="mt-16 text-center">
+          <p className="text-sm text-zinc-500 dark:text-zinc-500">
+            MVP - Analisis menggunakan data simulasi. Integrasi dengan speech-to-text akan dilakukan di tahap berikutnya.
+          </p>
         </div>
       </main>
     </div>
