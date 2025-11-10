@@ -1,4 +1,5 @@
-// Export all components from here for easier imports
-export { default as Hero } from "./Hero";
-export { default as FileUploader } from "./FileUploader";
-export { default as FillerWordAnalyzer } from "./FillerWordAnalyzer";
+// Global Components - Reusable across all modules
+export { default as Button } from './Button';
+export { default as Card } from './Card';
+export { default as LoadingSpinner } from './LoadingSpinner';
+export { default as Container } from './Container';

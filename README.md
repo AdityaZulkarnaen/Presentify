@@ -73,20 +73,22 @@ Untuk menggunakan aplikasi ini di production, Anda perlu:
 
 ```
 presentify/
-├── app/
+├── app/                     # Next.js App Router
 │   ├── globals.css
 │   ├── layout.js
-│   └── page.js              # Main page
+│   └── page.js
 ├── src/
-│   ├── components/
-│   │   ├── Hero.js          # Hero section
-│   │   ├── FileUploader.js  # File upload component
-│   │   ├── FillerWordAnalyzer.js  # Analysis display
-│   │   └── index.js
-│   └── services/
-│       └── fillerWordService.js   # Analysis logic
-└── public/
+│   ├── components/         # 🌍 Global reusable components
+│   ├── modules/            # 📦 Feature-specific modules
+│   │   ├── landing/       # Landing page module
+│   │   └── upload/        # Upload & analysis module
+│   ├── services/          # Business logic & API calls
+│   ├── utils/             # Helper functions
+│   └── lib/               # External library configs
+└── public/                # Static assets
 ```
+
+**Untuk detail lengkap struktur project, lihat [STRUCTURE.md](./STRUCTURE.md)**
 
 ## Contributing
 
